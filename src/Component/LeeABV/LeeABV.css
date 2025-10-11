@@ -1,0 +1,305 @@
+/* SupabaseDataViewer.css */
+
+/* Reset and base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+  }
+  
+  /* Container for the data viewer */
+  .data-viewer-container {
+    max-width: 1200px; /* Ajusta según necesites */
+    margin: 30px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .data-viewer-header {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+    margin: -20px -20px 20px -20px; /* Para que ocupe todo el ancho del contenedor padre */
+    border-radius: 12px 12px 0 0;
+  }
+  
+  .data-viewer-header h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Botón de descarga */
+  .download-button {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 20px;
+    display: inline-block;
+  }
+  
+  .download-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+    background: linear-gradient(135deg, #229954 0%, #27ae60 100%);
+  }
+  
+  .download-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(39, 174, 96, 0.2);
+  }
+  
+  .download-button:focus {
+    outline: 2px solid #27ae60;
+    outline-offset: 2px;
+  }
+  
+  /* Tabla de datos */
+  .data-table-wrapper {
+    overflow-x: auto; /* Permite scroll horizontal si la tabla es muy ancha */
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px; /* Ajusta según el número de columnas que esperes */
+  }
+  
+  .data-table thead {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+  }
+  
+  .data-table th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    white-space: nowrap; /* Evita que los encabezados se partan */
+  }
+  
+  .data-table th:last-child {
+    border-right: none;
+  }
+  
+  .data-table td {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e9ecef;
+    border-right: 1px solid #e9ecef;
+    vertical-align: middle;
+    font-size: 0.9rem;
+  }
+  
+  .data-table td:last-child {
+    border-right: none;
+  }
+  
+  .data-table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  
+  .data-table tbody tr:nth-child(even) {
+    background-color: #fdfdfd;
+  }
+  
+  .data-table tbody tr:nth-child(even):hover {
+    background-color: #f0f0f0;
+  }
+  
+  /* Mensajes de carga y error */
+  .loading-message,
+  .error-message,
+  .no-data-message {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .error-message {
+    color: #e74c3c;
+    font-weight: 500;
+    border: 1px solid #e74c3c;
+    background-color: #fdf2f2;
+    border-radius: 6px;
+    padding: 15px;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 992px) {
+    .data-viewer-container {
+      margin: 20px;
+      padding: 15px;
+    }
+    .data-viewer-header h2 {
+      font-size: 1.6rem;
+    }
+    .data-table {
+      min-width: 600px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .data-viewer-container {
+      margin: 15px;
+      padding: 10px;
+    }
+    .data-viewer-header {
+      padding: 20px 15px;
+      margin: -10px -10px 15px -10px;
+    }
+    .data-viewer-header h2 {
+      font-size: 1.4rem;
+    }
+    .download-button {
+      width: 100%;
+      padding: 12px;
+      font-size: 0.95rem;
+    }
+    .data-table th,
+    .data-table td {
+      padding: 8px 10px;
+      font-size: 0.85rem;
+    }
+    .data-table {
+      min-width: auto; /* En pantallas muy pequeñas, deja que el scroll maneje todo */
+    }
+  }
+
+  /* ... (estilos existentes) ... */
+
+/* Estilos para el formulario de clave */
+.key-prompt-container {
+    max-width: 500px; /* Más pequeño para el prompt de clave */
+    text-align: center;
+  }
+  
+  .key-form {
+    padding: 20px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .key-form p {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+    color: #333;
+  }
+  
+  .key-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+    text-align: center;
+  }
+  
+  .key-input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+  
+  .key-submit-button {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    text-transform: uppercase;
+  }
+  
+  .key-submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+  }
+  
+  .key-submit-button:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+  }
+  
+  .auth-error-message {
+    color: #e74c3c;
+    font-weight: 500;
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 480px) {
+      .data-viewer-header h2 {
+          font-size: 1.2rem;
+      }
+  }
+  
+  /* Print styles */
+  @media print {
+    body {
+      background: white;
+    }
+    .data-viewer-container {
+      box-shadow: none;
+      border: 1px solid #000;
+      margin: 0;
+      padding: 0;
+    }
+    .data-viewer-header {
+      background: #f0f0f0 !important;
+      color: #000 !important;
+      text-shadow: none;
+    }
+    .download-button {
+      display: none;
+    }
+    .data-table-wrapper {
+      overflow: visible;
+      box-shadow: none;
+      border: none;
+    }
+    .data-table {
+      font-size: 0.7rem;
+    }
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ccc;
+    }
+  }
+
