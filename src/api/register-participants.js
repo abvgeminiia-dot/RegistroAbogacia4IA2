@@ -10,8 +10,8 @@ import Airtable from 'airtable';
 const initAirtable = () => {
     try {
         // Vercel inyecta las variables de entorno (secrets) en process.env
-        const apiKey = process.env.VITE_APP_AIRTABLE_API_KEY;
-        const baseId = process.env.VITE_APP_AIRTABLE_BASE_ID;
+        const apiKey = process.env.AIRTABLE_API_KEY;
+        const baseId = process.env.AIRTABLE_BASE_ID;
 
         if (!apiKey || !baseId) {
             console.error("Faltan variables de entorno: API Key o Base ID.");
@@ -56,8 +56,8 @@ export default async function handler(req, res) {
         const base = initAirtable(); // Inicializa la conexión con Airtable
         
         // Obtener nombres de las tablas desde las variables de entorno
-        const INSCRIPTION_TABLE = process.env.VITE_APP_AIRTABLE_TABLE_NAME;
-        const VALIDATION_TABLE = process.env.VITE_APP_AIRTABLE_VALIDATION_TABLE_NAME;
+        const INSCRIPTION_TABLE = process.env.AIRTABLE_TABLE_NAME;
+        const VALIDATION_TABLE = process.env.AIRTABLE_VALIDATION_TABLE_NAME;
 
         // --- 3. VALIDACIÓN DE IDs EN AIRTABLE (SEGURIDAD) ---
         
