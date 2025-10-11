@@ -9,13 +9,14 @@ import Airtable from 'airtable';
  */
 const initAirtable = () => {
     try {
-        // Vercel inyecta las variables de entorno (secrets) en process.env
-        const apiKey = process.env.AIRTABLE_API_KEY;
+        // CORRECCIÓN: Usando nombres estándar de variables de entorno (sin prefijo VITE_APP_)
+        const apiKey = process.env.AIRTABLE_API_KEY; 
         const baseId = process.env.AIRTABLE_BASE_ID;
 
         if (!apiKey || !baseId) {
             console.error("Faltan variables de entorno: API Key o Base ID.");
-            throw new Error("Error de configuración interna del servidor (Variables de Entorno).");
+            // Mensaje de error ajustado para reflejar los nuevos nombres de variables
+            throw new Error(`Error de configuración interna: Faltan AIRTABLE_API_KEY o AIRTABLE_BASE_ID. (Verifique los secretos de Vercel).`);
         }
 
         Airtable.configure({
@@ -29,10 +30,11 @@ const initAirtable = () => {
         return base;
 
     } catch (error) {
-        // Propaga el error para que sea capturado por el manejador principal
         throw error;
     }
 };
+
+// ----------------------------------------------------------------------
 
 /**
  * Función principal (handler) para la API de Vercel.
@@ -42,6 +44,7 @@ export default async function handler(req, res) {
     
     // 1. Verificar el Método de la Solicitud
     if (req.method !== 'POST') {
+        res.setHeader('Allow', 'POST');
         return res.status(405).json({ message: 'Método no permitido. Solo se acepta POST.' });
     }
 
@@ -53,27 +56,29 @@ export default async function handler(req, res) {
             return res.status(400).json({ message: 'Datos incompletos: Se requieren datos de facturación y al menos un participante.' });
         }
 
-        const base = initAirtable(); // Inicializa la conexión con Airtable
+        const base = initAirtable(); 
         
-        // Obtener nombres de las tablas desde las variables de entorno
+        // CORRECCIÓN: Usando nombres estándar de variables de entorno
         const INSCRIPTION_TABLE = process.env.AIRTABLE_TABLE_NAME;
         const VALIDATION_TABLE = process.env.AIRTABLE_VALIDATION_TABLE_NAME;
+
+        if (!INSCRIPTION_TABLE || !VALIDATION_TABLE) {
+             throw new Error("Error de configuración interna: Faltan nombres de tablas de Airtable.");
+        }
 
         // --- 3. VALIDACIÓN DE IDs EN AIRTABLE (SEGURIDAD) ---
         
         const participantIDs = participants.map(p => p.IDValidadorParticipante.trim());
         const uniqueParticipantIDs = [...new Set(participantIDs)];
 
-        // Construir la fórmula para buscar todos los IDs únicos en la tabla de validación
         const idFormula = `OR(${uniqueParticipantIDs.map(id => `{ID Validador} = '${id}'`).join(',')})`;
         
-        // Consultar la tabla de validación para los IDs proporcionados
+        // Consultar la tabla de validación
         const validIDsRecords = await base(VALIDATION_TABLE).select({
             filterByFormula: idFormula,
-            fields: ['ID Validador', 'Usado'], // Solo necesitamos estos campos para el check
+            fields: ['ID Validador', 'Usado'],
         }).all();
 
-        // Mapear IDs encontrados y los que ya han sido usados
         const usedIDs = validIDsRecords
             .filter(record => record.get('Usado'))
             .map(record => record.get('ID Validador'));
@@ -93,7 +98,7 @@ export default async function handler(req, res) {
 
         // --- 4. PREPARAR DATOS DE REGISTRO ---
         
-        // Usar una clave única para relacionar todos los participantes con una sola entrada de facturación (opcional, pero útil)
+        // Clave única basada en RIF + Timestamp
         const facturacionKey = `${billingData.RIFCedulaFacturacion.replace(/[^A-Z0-9]/g, '')}-${Date.now()}`;
         
         // Datos de facturación
@@ -103,14 +108,14 @@ export default async function handler(req, res) {
             'Dirección Fiscal': billingData.DireccionFiscalFacturacion,
             'Teléfono Facturación': billingData.TelefonoFacturacion,
             'Sector Facturación': billingData.SectorOrganizacionFacturacion,
-            'Tipo de Factura': billingData.TFactura || 'Pro forma', // Asume 'Pro forma' si no está
+            'Tipo de Factura': billingData.TFactura || 'Pro forma', 
             'Clave Facturación': facturacionKey
         };
 
-        // Preparar registros finales (combinando facturación y participante)
+        // Preparar registros finales
         const finalRecords = participants.map(p => ({
             fields: {
-                ...billingRecordFields, // Datos de facturación
+                ...billingRecordFields, 
                 
                 // Datos del participante
                 'ID Validador': p.IDValidadorParticipante,
@@ -126,30 +131,27 @@ export default async function handler(req, res) {
                 'RIF Organización': p.RIFOrganizacionParticipante,
                 'Cargo': p.CargoOrganizacionParticipante,
                 'Sector Organización': p.SectorOrganizacionParticipante,
-                'Fecha de Registro': new Date().toISOString().split('T')[0] // Opcional: añade fecha
+                'Fecha de Registro': new Date().toISOString().split('T')[0] 
             }
         }));
 
 
         // --- 5. ESCRITURA EN AIRTABLE ---
         
-        // 5.1. Crear registros de inscripción
         const createdRecords = await base(INSCRIPTION_TABLE).create(finalRecords, { typecast: true });
 
         // 5.2. Marcar IDs como usados en la tabla de Validación
         const validationUpdates = validIDsRecords
-            // Filtrar solo los records que fueron usados en esta solicitud
             .filter(record => participantIDs.includes(record.get('ID Validador'))) 
             .map(record => ({
                 id: record.id,
                 fields: {
-                    'Usado': true // El nombre de tu columna de Checkbox/Booleano
+                    'Usado': true 
                 }
             }));
 
         if (validationUpdates.length > 0) {
-             // Ejecuta la actualización en el servidor de Airtable
-             await base(VALIDATION_TABLE).update(validationUpdates, { typecast: true });
+            await base(VALIDATION_TABLE).update(validationUpdates, { typecast: true });
         }
 
 
@@ -161,7 +163,6 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Error durante el procesamiento de la solicitud:', error);
-        // Devolver un mensaje de error legible al front-end
         res.status(500).json({ message: error.message || 'Error interno del servidor al procesar la solicitud.' });
     }
 }
