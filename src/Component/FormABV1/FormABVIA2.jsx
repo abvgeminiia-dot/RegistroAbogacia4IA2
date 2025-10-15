@@ -392,7 +392,7 @@ const FormABV2 = () => {
                                     Abrir Correo para Adjuntar
                                 </a>
                                 <small className="form-text text-muted">
-                                    Por favor, envíe el RIF a: <strong>abv.gemini.ia@gmail.com</strong>
+                                    Por favor, en caso de que tenga habilitado protecciones en el navegador envíe el RIF a: <strong>abv.gemini.ia@gmail.com</strong>
                                 </small>
                             </div>
                         </div>
