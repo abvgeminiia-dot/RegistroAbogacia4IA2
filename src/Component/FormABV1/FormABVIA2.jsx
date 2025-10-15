@@ -326,8 +326,8 @@ const FormABV2 = () => {
                 <div className="header-card">
                     <div className="logo-container"><img src={logoA} className="App-logo" alt="logo" /></div>
                     <h1>Asociación Bancaria de Venezuela</h1>
-                    <h2>Formulario para Inscripción Agile Legal Project Management</h2>
-                    <h2>3 de noviembre de 2025 - 8:00 a.m. a 12:00 p.m. y 4 de noviembre de 2025 8:00 a.m. a 12:00 p.m. TURNO:MAÑANA</h2>
+                    <h2>Formulario para Inscripción Abogacia 4.0</h2>
+                    <h2>X de noviembre de 2025 - 8:00 a.m. a 12:00 p.m.</h2>
                 </div>
                 <form onSubmit={handleSubmit} className="form-content">
                     <div className="section-card">
