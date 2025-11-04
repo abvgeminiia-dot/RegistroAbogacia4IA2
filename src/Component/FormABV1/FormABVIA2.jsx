@@ -258,12 +258,12 @@ const FormABV2 = () => {
                 throw new Error("ID ya registrado.");
             }
             
-            // Validar contra IDValidadorMañanaFecha1
-            const checkValidityFormula = `OR(${validatorIds.map(id => `{IDValidadorMañanaFecha1} = '${id}'`).join(',')})`;
-            const validIdRecords = await validationTable.select({ filterByFormula: checkValidityFormula, fields: ['IDValidadorMañanaFecha1'] }).all();
+            // Validar contra IDValidadorIA
+            const checkValidityFormula = `OR(${validatorIds.map(id => `{IDValidadorIA} = '${id}'`).join(',')})`;
+            const validIdRecords = await validationTable.select({ filterByFormula: checkValidityFormula, fields: ['IDValidadorIA'] }).all();
             
             if (validIdRecords.length !== validatorIds.length) {
-                const foundValidIds = new Set(validIdRecords.map(rec => rec.get('IDValidadorMañanaFecha1')));
+                const foundValidIds = new Set(validIdRecords.map(rec => rec.get('IDValidadorIA')));
                 const invalidIds = validatorIds.filter(id => !foundValidIds.has(id));
                 alert(`Error: El/los siguiente(s) ID Validador no son válidos o no existen: ${invalidIds.join(', ')}.`);
                 throw new Error("ID no válido.");
@@ -327,7 +327,7 @@ const FormABV2 = () => {
                     <div className="logo-container"><img src={logoA} className="App-logo" alt="logo" /></div>
                     <h1>Asociación Bancaria de Venezuela</h1>
                     <h2>Formulario para Inscripción Abogacia 4.0</h2>
-                    <h2>19 de noviembre de 2025 - 8:00 a.m. a 12:00 p.m.</h2>
+                    <h2>26 de noviembre de 2025 - 8:00 a.m. a 12:00 p.m.</h2>
                 </div>
                 <form onSubmit={handleSubmit} className="form-content">
                     <div className="section-card">
@@ -392,7 +392,7 @@ const FormABV2 = () => {
                                     Abrir Correo para Adjuntar
                                 </a>
                                 <small className="form-text text-muted">
-                                    Por favor, en caso de que tenga habilitado protecciones en el navegador envíe el RIF a: <strong>abv.gemini.ia@gmail.com</strong>
+                                    Por favor, en caso de que tenga habilitado protecciones en el navegador envíe el RIF a: <strong>abv.thap@asobanca.com.ve</strong>
                                 </small>
                             </div>
                         </div>
