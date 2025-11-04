@@ -9,7 +9,7 @@ import logoA from './LogoABV.png'; // Asegúrate de tener el logo en la misma ca
 
 const apiKey = import.meta.env.VITE_APP_AIRTABLE_API_KEY;
 const baseId = import.meta.env.VITE_APP_AIRTABLE_BASE_ID;
-const tableName = import.meta.env.VITE_APP_AIRTABLE_TABLE_NAME1; // <-- Tabla principal
+const tableName = import.meta.env.VITE_APP_AIRTABLE_TABLE_NAME; // <-- Tabla principal
 const validationTableName = import.meta.env.VITE_APP_AIRTABLE_VALIDATION_TABLE_NAME;
 
 
